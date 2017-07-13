@@ -33,7 +33,8 @@ function makeFSMReducer(stateMap, actionMap, prefix = '') {
 
 	let reducer = (state = initState, actionObj) => {
 		
-    const { type : actionName } = actionObj;
+    const { type } = actionObj;
+    const actionName = (type || '').replace(new RegExp('^' + prefix), '');
     if( !actionName ) {
       return state;
     }

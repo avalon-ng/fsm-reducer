@@ -1,6 +1,6 @@
 {
   "name": "fsm-reducer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A factory function to produce FSM reducer",
   "main": "fsm.js",
   "scripts": {
