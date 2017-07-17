@@ -1,19 +1,19 @@
-
-function makeFSMReducer(stateMap, actionMap, prefix = '') {
-
+function makeFSM(stateMap, actionMap, opts = { }) {
+  const { prefix = '', validateMap = {} } = opts; 
   const initState = {
     status: stateMap.start.status,
     value: stateMap.start.value,
   };
 	
 	let currentStatus = stateMap.start.status;
+  let validateError = null;
 
-  function getAction(actions, actionName) {
-    const actionParts = actionName.split('.');
+  function getHandler(handles, handlerName) {
+    const actionParts = handlerName.split('.');
     if(actionParts.length == 1) {
-      return actions[actionName];
+      return handles[handlerName];
     }
-    return getAction(actions[actionParts[0]], actionParts.slice(1).join('.'));
+    return getHandler(handles[actionParts[0]], actionParts.slice(1).join('.'));
   }
 
   function transit(state, action) {
@@ -48,7 +48,17 @@ function makeFSMReducer(stateMap, actionMap, prefix = '') {
       console.warn(msg);
       return state;
     }
-    const action = getAction(actionMap, actionName);
+
+       
+    const action = getHandler(actionMap, actionName);
+    const validate = getHandler(validateMap, actionName);
+
+    if ( validate ) {
+      validateError = validate(value, actionObj);
+      if ( validateError ){
+        return state;
+      }
+    }
 		
     // alow action to be no operation
     const nextValue = action(value, actionObj) || value;
@@ -60,10 +70,20 @@ function makeFSMReducer(stateMap, actionMap, prefix = '') {
       value: nextValue,
     };
   }
-	reducer.getActions = () => {
+
+	const getActions = () => {
 		return Object.keys(stateMap.states[currentStatus]);
 	}
-	return reducer;
+
+  const getValidateError = () => {
+    return validateError;
+  }
+
+	return {
+    reducer,
+    getActions,
+    getValidateError
+  };
 }
 
-module.exports = makeFSMReducer;
+module.exports = makeFSM;
