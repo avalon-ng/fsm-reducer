@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "umd",
+        "moduleResolution": "node",
+        "noUnusedLocals": true,
+        "declaration": true
+    }
+}
+

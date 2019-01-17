@@ -4,6 +4,7 @@
   "description": "A factory function to produce FSM reducer",
   "main": "fsm.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,8 @@
     "state-machine"
   ],
   "author": "jeno5980515",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.2.2"
+  }
 }
